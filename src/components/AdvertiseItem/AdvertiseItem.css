@@ -1,0 +1,9 @@
+
+.ads-item {
+    display: flex !important;
+}
+.ads-item > span{
+    margin: 4px;
+    border: 1px solid black;
+    flex: 1;
+}
