@@ -1,6 +1,8 @@
 
 .ads-item {
     display: flex !important;
+    border: 1px solid red;
+
 }
 .ads-item > span{
     margin: 4px;
