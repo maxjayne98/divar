@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import SearchInput from "../SearchInput";
+import useAdvertises from "../../context/Advertises/context.js";
+import { objectToUrlParam } from "../../utils/globals";
 import "./FilterForm.css";
+
 function FilterForm() {
+  const { dispatch } = useAdvertises();
   const [formValues, setFormValues] = useState({
     field: "",
     name: "",
@@ -15,6 +19,9 @@ function FilterForm() {
 
   function formSubmit(ev) {
     console.log(formValues);
+    dispatch({ type: "FILTER_DATA", payload: formValues });
+    console.log(document.location);
+    window.history.replaceState(null, null, objectToUrlParam(formValues));
     ev.preventDefault();
   }
   return (

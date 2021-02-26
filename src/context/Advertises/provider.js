@@ -9,10 +9,13 @@ function AdvertisersProvider({ children }) {
         data: data.slice(0, (state.index + 1) * 30),
         index: state.index + 1,
       };
+    } else if (action.type === "FILTER_DATA") {
+      console.log(action);
+      return { ...state };
     }
   }
 
-  const initialState = { data: data.slice(0, 30), index: 1 };
+  const initialState = { data: data.slice(0, 30), index: 1, filters: {} };
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <AdvertiseContext.Provider value={{ state, dispatch }}>
