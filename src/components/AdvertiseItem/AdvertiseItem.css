@@ -1,11 +1,21 @@
-
 .ads-item {
-    display: flex !important;
-    border: 1px solid red;
-
+  display: flex !important;
+  border: 1px solid red;
 }
-.ads-item > span{
-    margin: 4px;
-    border: 1px solid black;
-    flex: 1;
+.ads-item > span {
+  margin: 4px;
+  border: 1px solid black;
+}
+.ads-item__id,
+.ads-item__field {
+  /* flex: 1; */
+}
+.ads-item__name {
+  flex: 3;
+}
+.ads-item__date {
+  /* flex: 2; */
+}
+.ads-item__title {
+  flex: 4;
 }
