@@ -8,7 +8,9 @@ function AdertisersList() {
   const { data } = state;
   function fetchNewData() {
     dispatch({ type: "ADD_DATA" });
+    console.log("fetchNewData is fired");
   }
+  console.log(data.length);
   useInfiniteScroll(fetchNewData, 70);
   return (
     <div>
