@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import AdvertiseContext from "./store";
 import data from "../../data.json";
-import { act } from "react-dom/test-utils";
+
 function AdvertisersProvider({ children }) {
   function reducer(state, action) {
     if (action.type === "ADD_DATA") {

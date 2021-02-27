@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import SearchInput from "../SearchInput";
 import useAdvertises from "../../context/Advertises/context.js";
-import { objectToUrlParam } from "../../utils/globals";
+import {
+  objectToUrlParam,
+  checkFilters,
+  validFilter,
+} from "../../utils/globals";
 import "./FilterForm.css";
 
 function FilterForm() {
@@ -18,10 +22,15 @@ function FilterForm() {
   };
 
   function formSubmit(ev) {
-    console.log(formValues);
-    dispatch({ type: "FILTER_DATA", payload: formValues });
-    console.log(document.location);
-    window.history.replaceState(null, null, objectToUrlParam(formValues));
+    const validatedFilters = validFilter(formValues);
+    if (checkFilters(formValues)) {
+      dispatch({ type: "FILTER_DATA", payload: validatedFilters });
+      window.history.replaceState(
+        null,
+        null,
+        objectToUrlParam(validatedFilters)
+      );
+    }
     ev.preventDefault();
   }
   return (
