@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SearchInput from "../SearchInput";
 import useAdvertises from "../../context/Advertises/context.js";
+import useLoading from "../../context/Loading/context";
 import {
   objectToUrlParam,
   checkFilters,
@@ -10,6 +11,7 @@ import "./FilterForm.css";
 
 function FilterForm() {
   const { dispatch } = useAdvertises();
+  const { setLoading } = useLoading();
   const [formValues, setFormValues] = useState({
     field: "",
     name: "",
@@ -28,7 +30,9 @@ function FilterForm() {
     const validatedFilters = validFilter(formValues);
     if (checkFilters(formValues)) {
       console.log("submit is fired");
+      setLoading(true);
       dispatch({ type: "FILTER_DATA", payload: validatedFilters });
+      setLoading(false);
       window.history.replaceState(
         null,
         null,

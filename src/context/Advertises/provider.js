@@ -15,7 +15,6 @@ function AdvertisersProvider({ children }) {
       const filters = { ...action.payload };
       var filterdData = data;
       if (filters["date"]) {
-        setIsLoading(true);
         const BST = new BinarySearchTree();
         BST.make(filterdData);
         const node = BST.searchInBst(filters["date"]);
@@ -27,7 +26,6 @@ function AdvertisersProvider({ children }) {
         filterdData = filterData(filters, filterdData);
         console.log("was not empty");
       }
-      setIsLoading(false);
       return {
         ...state,
         data: filterdData,
@@ -35,11 +33,30 @@ function AdvertisersProvider({ children }) {
       };
     }
   }
-  const [isLoading, setIsLoading] = useState(false);
   const initialState = { data: data, index: 1, filters: {} };
   const [state, dispatch] = useReducer(reducer, initialState);
+  // async function doFilter(filters) {
+  //   var filterdData = data;
+  //   if (filters["date"]) {
+  //     const BST = new BinarySearchTree();
+  //     BST.make(filterdData);
+  //     const node = BST.searchInBst(filters["date"]);
+  //     filterdData = node && node.getData();
+  //     delete filters["date"];
+  //   }
+  //   console.log(filters);
+  //   if (!isEmptyObject(filters)) {
+  //     filterdData = filterData(filters, filterdData);
+  //     console.log("was not empty");
+  //   }
+  //   return {
+  //     ...state,
+  //     data: filterdData,
+  //     index: 1,
+  //   };
+  // }
   return (
-    <AdvertiseContext.Provider value={{ state, dispatch, isLoading }}>
+    <AdvertiseContext.Provider value={{ state, dispatch }}>
       {children}
     </AdvertiseContext.Provider>
   );
