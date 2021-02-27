@@ -28,6 +28,11 @@ function isTwoStringSame(str1, str2) {
 }
 
 export function filterData(filters, data) {
+  console.log("this is filter data::::", filters, data);
+  if (filters.length <= 0 || data.length <= 0) {
+    return [];
+  }
+
   for (let filter of Object.keys(filters)) {
     for (let j = 0; j < data.length; j++) {
       if (
@@ -42,4 +47,7 @@ export function filterData(filters, data) {
     }
   }
   return data;
+}
+export function isEmptyObject(obj) {
+  return Object.keys(obj).length === 0;
 }
