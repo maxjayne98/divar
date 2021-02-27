@@ -5,7 +5,7 @@ import useInfiniteScroll from "../../hooks/useInfinityScroll";
 
 function AdertisersList() {
   const { state, dispatch } = useAdvertises();
-  const { data } = state;
+  const { data, index } = state;
   function fetchNewData() {
     dispatch({ type: "ADD_DATA" });
     console.log("fetchNewData is fired");
@@ -14,7 +14,7 @@ function AdertisersList() {
   useInfiniteScroll(fetchNewData, 70);
   return (
     <div>
-      {data.map((item) => (
+      {data.slice(0, index * 30).map((item) => (
         <AdvertiseItem key={item.id} data={item} />
       ))}
     </div>
