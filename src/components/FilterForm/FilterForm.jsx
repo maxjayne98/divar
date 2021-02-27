@@ -6,20 +6,20 @@ import {
   objectToUrlParam,
   checkFilters,
   validFilter,
+  createFilterObject,
+  isEmptyObject,
 } from "../../utils/globals";
 import "./FilterForm.css";
 
 function FilterForm() {
-  const { dispatch } = useAdvertises();
+  const { dispatch, state } = useAdvertises();
+  const { filters } = state;
   const { setLoading } = useLoading();
   const [formValues, setFormValues] = useState({
     field: "",
     name: "",
     date: "",
     title: "",
-  });
-  useEffect(() => {
-    console.log("FilterForm is renderd");
   });
   const changeHandler = (e) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
@@ -29,24 +29,55 @@ function FilterForm() {
     ev.preventDefault();
     const validatedFilters = validFilter(formValues);
     if (checkFilters(formValues)) {
-      console.log("submit is fired");
-      setLoading(true);
       dispatch({ type: "FILTER_DATA", payload: validatedFilters });
-      setLoading(false);
       window.history.replaceState(
         null,
         null,
         objectToUrlParam(validatedFilters)
       );
+    } else {
+      if (checkFilters(filters)) {
+        dispatch({ type: "REST_FILTER" });
+      }
     }
   }
+  useEffect(() => {
+    const filters = validFilter(
+      createFilterObject(window.location.pathname.substring(1).split("&"))
+    );
+    console.log("in useEffect : ", filters);
+    if (!isEmptyObject(filters)) {
+      setFormValues(filters);
+      dispatch({ type: "FILTER_DATA", payload: filters });
+    }
+  }, []);
   return (
     <form className="filter-form" onSubmit={formSubmit}>
-      <SearchInput name="field" type="text" handleOnChange={changeHandler} />
-      <SearchInput name="name" type="text" handleOnChange={changeHandler} />
-      <SearchInput name="date" type="date" handleOnChange={changeHandler} />
-      <SearchInput name="title" type="text" handleOnChange={changeHandler} />
-      <SearchInput name="submit" type="submit" />
+      <SearchInput
+        values={formValues}
+        name="field"
+        type="text"
+        handleOnChange={changeHandler}
+      />
+      <SearchInput
+        values={formValues}
+        name="name"
+        type="text"
+        handleOnChange={changeHandler}
+      />
+      <SearchInput
+        values={formValues}
+        name="date"
+        type="date"
+        handleOnChange={changeHandler}
+      />
+      <SearchInput
+        values={formValues}
+        name="title"
+        type="text"
+        handleOnChange={changeHandler}
+      />
+      <SearchInput values={formValues} name="submit" type="submit" />
     </form>
   );
 }

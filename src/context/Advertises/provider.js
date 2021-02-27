@@ -12,8 +12,10 @@ function AdvertisersProvider({ children }) {
         index: state.index + 1,
       };
     } else if (action.type === "FILTER_DATA") {
+      console.log(action.payload);
       const filters = { ...action.payload };
-      var filterdData = data;
+      var filterdData = [...data.slice(0, 100)];
+      console.log(filterdData.length, "whole");
       if (filters["date"]) {
         const BST = new BinarySearchTree();
         BST.make(filterdData);
@@ -21,16 +23,20 @@ function AdvertisersProvider({ children }) {
         filterdData = node && node.getData();
         delete filters["date"];
       }
-      console.log(filters);
-      if (!isEmptyObject(filters)) {
+      if (!isEmptyObject(filters) && filterdData) {
         filterdData = filterData(filters, filterdData);
-        console.log("was not empty");
       }
+      filterdData && console.log(filterdData.length, "after others");
+
+      console.log("finish");
       return {
         ...state,
         data: filterdData,
         index: 1,
+        filters: { ...action.payload },
       };
+    } else if (action.type === "REST_FILTER") {
+      return { ...initialState };
     }
   }
   const initialState = { data: data, index: 1, filters: {} };

@@ -37,7 +37,6 @@ class BinarySearchTree {
         node.right = newNode;
       } else this.insertNode(node.right, data);
     } else if (newDate === node.getDate()) {
-      // console.log("this is that shit", node.getDate());
       node.addData(data);
     }
   }

@@ -10,16 +10,14 @@ function AdertisersList() {
   const { loading } = useLoading();
   function fetchNewData() {
     dispatch({ type: "ADD_DATA" });
-    console.log("fetchNewData is fired");
   }
-  console.log(data.length);
   useInfiniteScroll(fetchNewData, 70);
-  console.log("thisiiisisis is loadiidididing ", loading);
   return (
     <div>
       {loading
         ? "dar hale bargozari"
-        : data
+        : data &&
+          data
             .slice(0, index * 30)
             .map((item) => <AdvertiseItem key={item.id} data={item} />)}
     </div>
