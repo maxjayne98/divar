@@ -19,3 +19,7 @@
 .ads-item__title {
   flex: 4;
 }
+.ads-item__star {
+  color: red;
+  font-size: 50px;
+}
