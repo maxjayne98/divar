@@ -25,14 +25,20 @@ function AdvertisersProvider({ children }) {
         data: action.payload,
         index: 1,
       };
+    } else if (action.type === "SET_LOADING") {
+      return {
+        ...state,
+        loading: action.payload,
+      };
     }
   }
 
-  const initialState = { data: data, index: 1, filters: {} };
+  const initialState = { data: data, index: 1, filters: {}, loading: false };
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   async function doFilter(fils, callback) {
+    callback({ type: "SET_LOADING", payload: true });
     const filss = { ...fils };
     var filterdData = [...data];
     if (filss["date"]) {
@@ -71,6 +77,9 @@ function AdvertisersProvider({ children }) {
               []
             ),
           });
+          setTimeout(() => {
+            callback({ type: "SET_LOADING", payload: false });
+          }, 1000);
         });
     } else {
       console.log("whithout others");
@@ -78,10 +87,13 @@ function AdvertisersProvider({ children }) {
         type: "SET_DATA",
         payload: filterdData,
       });
+      setTimeout(() => {
+        callback({ type: "SET_LOADING", payload: false });
+      }, 1000);
     }
   }
   return (
-    <AdvertiseContext.Provider value={{ state, dispatch, doFilter, loading }}>
+    <AdvertiseContext.Provider value={{ state, dispatch, doFilter }}>
       {children}
     </AdvertiseContext.Provider>
   );
