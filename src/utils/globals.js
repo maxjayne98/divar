@@ -32,7 +32,6 @@ function isTwoStringSame(str1, str2) {
 }
 
 export function filterData(filters, data) {
-  console.log("in fiterData ", filters, data);
   if (filters.length <= 0 || data.length <= 0) {
     return [];
   }

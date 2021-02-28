@@ -13,7 +13,7 @@ import {
 import "./FilterForm.scss";
 
 function FilterForm() {
-  const { dispatch, state } = useAdvertises();
+  const { dispatch, state, doFilter } = useAdvertises();
   const { filters } = state;
   const { setLoading } = useLoading();
   const [formValues, setFormValues] = useState({
@@ -30,7 +30,8 @@ function FilterForm() {
     ev.preventDefault();
     const validatedFilters = validFilter(formValues);
     if (checkFilters(formValues)) {
-      dispatch({ type: "FILTER_DATA", payload: validatedFilters });
+      // dispatch({ type: "FILTER_DATA", payload: validatedFilters });
+      doFilter(validatedFilters);
       window.history.replaceState(
         null,
         null,
@@ -49,7 +50,8 @@ function FilterForm() {
     console.log("in useEffect : ", filters);
     if (!isEmptyObject(filters)) {
       setFormValues(filters);
-      dispatch({ type: "FILTER_DATA", payload: filters });
+      // dispatch({ type: "FILTER_DATA", payload: filters });
+      doFilter(filters);
     }
   }, []);
   return (

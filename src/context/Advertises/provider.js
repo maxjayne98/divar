@@ -37,32 +37,63 @@ function AdvertisersProvider({ children }) {
       };
     } else if (action.type === "REST_FILTER") {
       return { ...initialState };
+    } else if (action.type === "SET_DATA") {
+      console.log(action.type, action.payload.length);
+      return {
+        data: action.payload,
+        index: 1,
+      };
     }
   }
+
   const initialState = { data: data, index: 1, filters: {} };
   const [state, dispatch] = useReducer(reducer, initialState);
-  // async function doFilter(filters) {
-  //   var filterdData = data;
-  //   if (filters["date"]) {
-  //     const BST = new BinarySearchTree();
-  //     BST.make(filterdData);
-  //     const node = BST.searchInBst(filters["date"]);
-  //     filterdData = node && node.getData();
-  //     delete filters["date"];
-  //   }
-  //   console.log(filters);
-  //   if (!isEmptyObject(filters)) {
-  //     filterdData = filterData(filters, filterdData);
-  //     console.log("was not empty");
-  //   }
-  //   return {
-  //     ...state,
-  //     data: filterdData,
-  //     index: 1,
-  //   };
-  // }
+  const [loading, setLoading] = useState(false);
+  async function doFilter(fils) {
+    const filss = { ...fils };
+    var filterdData = [...data];
+    // console.log(filterdData.length, "whole");
+    if (filss["date"]) {
+      const BST = new BinarySearchTree();
+      BST.make(filterdData);
+      const node = BST.searchInBst(filss["date"]);
+      filterdData = node && node.getData();
+      delete filss["date"];
+    }
+    if (!isEmptyObject(filss) && filterdData) {
+      const promises = [];
+      const numberOfPromises = 20;
+      const eachPromiseShare = Math.ceil(filterdData.length / numberOfPromises);
+      for (let i = 0; i < numberOfPromises; i++) {
+        let start = i * eachPromiseShare;
+        let end = i * eachPromiseShare + eachPromiseShare;
+        promises[i] = new Promise((resolve, reject) =>
+          resolve(filterData(filss, data.slice(start, end)))
+        );
+      }
+      filterdData = [];
+      await Promise.all(promises)
+        .then((values) => {
+          console.log("this is it ", values);
+          filterdData = [...filterdData, ...values];
+        })
+        .then(() => {
+          console.log(
+            filterdData.reduce((acc, item) => (acc += item.length), 0)
+          );
+          dispatch({
+            type: "SET_DATA",
+            payload: filterdData.reduce(
+              (acc, item) => (acc = [...acc, ...item]),
+              []
+            ),
+          });
+        });
+      // console.log("asssghar", filterdData, all);
+    }
+  }
   return (
-    <AdvertiseContext.Provider value={{ state, dispatch }}>
+    <AdvertiseContext.Provider value={{ state, dispatch, doFilter, loading }}>
       {children}
     </AdvertiseContext.Provider>
   );
