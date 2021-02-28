@@ -69,7 +69,7 @@ function FilterForm() {
         //change url parameters
         insertParamsToUrl(validatedFilters);
       }
-      dispatchSortFields({ type: "RESET_FIELD" });
+      // dispatchSortFields({ type: "RESET_FIELD" });
     }
   }
 
