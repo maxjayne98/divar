@@ -22,8 +22,8 @@ function AdvertiseItem({ data }) {
       <td>{date.replace(/-/g, "/")}</td>
       <td>{title}</td>
       <td>{field}</td>
+      <td>{name}</td>
       <td>
-        {name}
         {isBookmark ? (
           <span className="ads-item__star" onClick={bookmarkOnClick}>
             &#9733;

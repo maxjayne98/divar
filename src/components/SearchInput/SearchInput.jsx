@@ -18,7 +18,7 @@ function SearchInput({ label, values, name, type, handleOnChange }) {
     <div class="search-input">
       <label for="inputText">{label}</label>
       <input
-        className="search-input__input form-control"
+        className="form-control"
         defaultValue={values[name]}
         type={type}
         onChange={handleOnChange}

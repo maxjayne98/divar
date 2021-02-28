@@ -19,6 +19,7 @@ function AdertisersList() {
     "نام آگهی",
     "فیلد",
     "نام تغییردهنده",
+    "مورد علاقه",
   ];
   return (
     <div className="ads-list">

@@ -54,7 +54,6 @@ function FilterForm() {
   }, []);
   return (
     <form id="form1" className="filter-form" onSubmit={formSubmit}>
-      <CustomizedButton form="form1" type="submit" name="فیلتر" />
       <SearchInput
         values={formValues}
         name="field"
@@ -83,6 +82,7 @@ function FilterForm() {
         label="عنوان"
         handleOnChange={changeHandler}
       />
+      <CustomizedButton form="form1" type="submit" name="فیلتر" />
     </form>
   );
 }

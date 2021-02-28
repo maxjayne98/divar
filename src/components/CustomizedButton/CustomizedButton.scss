@@ -6,4 +6,12 @@
   border-radius: 0.5rem;
   color: #495057;
   background-color: transparent;
+  margin: 1.4rem;
+}
+
+@media screen and (max-width: 850px) {
+  .button__container {
+    width: 100%;
+    text-align: center;
+  }
 }

@@ -1,3 +1,4 @@
+$medium-up: 700;
 .search-input {
   display: inline-block;
   margin: 1.4rem;
@@ -42,4 +43,9 @@ label {
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   box-shadow: none !important;
+}
+@media screen and (max-width: 850px) {
+  .search-input {
+    width: 40%;
+  }
 }
