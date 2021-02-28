@@ -3,7 +3,6 @@ import SearchInput from "../SearchInput";
 import CustomizedButton from "../CustomizedButton";
 import SortFields from "../SortFields";
 import useAdvertises from "../../context/Advertises/context.js";
-import useLoading from "../../context/Loading/context";
 import {
   validFilter,
   createFilterObject,
@@ -18,7 +17,6 @@ import "./FilterForm.scss";
 function FilterForm() {
   const { dispatch, state, doFilter } = useAdvertises();
   const { filters } = state;
-  const { setLoading } = useLoading();
 
   const [formValues, setFormValues] = useState({
     field: "",

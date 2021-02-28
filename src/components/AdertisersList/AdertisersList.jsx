@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import useAdvertises from "../../context/Advertises/context";
-import useLoading from "../../context/Loading/context";
 import AdvertiseItem from "../AdvertiseItem";
 import Loading from "../Loading";
 import useInfiniteScroll from "../../hooks/useInfinityScroll";
@@ -9,7 +8,6 @@ import "./AdertisersList.scss";
 function AdertisersList() {
   const { state, dispatch } = useAdvertises();
   const { data, index, loading } = state;
-  // const { loading } = useLoading();
   function fetchNewData() {
     dispatch({ type: "ADD_DATA" });
   }
