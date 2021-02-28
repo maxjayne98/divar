@@ -8,11 +8,9 @@ export function checkFilters(object) {
 }
 export function isAcceptedFilter(filter) {
   const filters = ["field", "date", "name", "title"];
-  console.log("this is filter", filter);
   return filters.filter((i) => i === filter);
 }
 export function validFilter(object) {
-  console.log(Object.keys(object));
   return Object.keys(object).reduce((acc, item) => {
     if (object[item] !== "" && isAcceptedFilter(item).length >= 1)
       return { ...acc, ...{ [item]: object[item] } };

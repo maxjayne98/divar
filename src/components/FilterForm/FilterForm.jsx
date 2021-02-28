@@ -31,7 +31,7 @@ function FilterForm() {
     const validatedFilters = validFilter(formValues);
     if (checkFilters(formValues)) {
       // dispatch({ type: "FILTER_DATA", payload: validatedFilters });
-      doFilter(validatedFilters);
+      doFilter(validatedFilters, dispatch);
       window.history.replaceState(
         null,
         null,
@@ -51,7 +51,7 @@ function FilterForm() {
     if (!isEmptyObject(filters)) {
       setFormValues(filters);
       // dispatch({ type: "FILTER_DATA", payload: filters });
-      doFilter(filters);
+      doFilter(filters, dispatch);
     }
   }, []);
   return (

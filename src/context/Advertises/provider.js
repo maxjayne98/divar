@@ -11,34 +11,10 @@ function AdvertisersProvider({ children }) {
         ...state,
         index: state.index + 1,
       };
-    } else if (action.type === "FILTER_DATA") {
-      console.log(action.payload);
-      const filters = { ...action.payload };
-      var filterdData = [...data.slice(0, 100)];
-      console.log(filterdData.length, "whole");
-      if (filters["date"]) {
-        const BST = new BinarySearchTree();
-        BST.make(filterdData);
-        const node = BST.searchInBst(filters["date"]);
-        filterdData = node && node.getData();
-        delete filters["date"];
-      }
-      if (!isEmptyObject(filters) && filterdData) {
-        filterdData = filterData(filters, filterdData);
-      }
-      filterdData && console.log(filterdData.length, "after others");
-
-      console.log("finish");
-      return {
-        ...state,
-        data: filterdData,
-        index: 1,
-        filters: { ...action.payload },
-      };
     } else if (action.type === "REST_FILTER") {
+      console.log("reset filter");
       return { ...initialState };
     } else if (action.type === "SET_DATA") {
-      console.log(action.type, action.payload.length);
       return {
         data: action.payload,
         index: 1,
@@ -49,18 +25,20 @@ function AdvertisersProvider({ children }) {
   const initialState = { data: data, index: 1, filters: {} };
   const [state, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoading] = useState(false);
-  async function doFilter(fils) {
+
+  async function doFilter(fils, callback) {
     const filss = { ...fils };
     var filterdData = [...data];
-    // console.log(filterdData.length, "whole");
     if (filss["date"]) {
       const BST = new BinarySearchTree();
       BST.make(filterdData);
       const node = BST.searchInBst(filss["date"]);
       filterdData = node && node.getData();
+      console.log("after date this is :::", filterdData.length);
       delete filss["date"];
     }
     if (!isEmptyObject(filss) && filterdData) {
+      console.log("with other than date", filss);
       const promises = [];
       const numberOfPromises = 20;
       const eachPromiseShare = Math.ceil(filterdData.length / numberOfPromises);
@@ -68,20 +46,19 @@ function AdvertisersProvider({ children }) {
         let start = i * eachPromiseShare;
         let end = i * eachPromiseShare + eachPromiseShare;
         promises[i] = new Promise((resolve, reject) =>
-          resolve(filterData(filss, data.slice(start, end)))
+          resolve(filterData(filss, filterdData.slice(start, end)))
         );
       }
       filterdData = [];
       await Promise.all(promises)
         .then((values) => {
-          console.log("this is it ", values);
           filterdData = [...filterdData, ...values];
         })
         .then(() => {
           console.log(
             filterdData.reduce((acc, item) => (acc += item.length), 0)
           );
-          dispatch({
+          callback({
             type: "SET_DATA",
             payload: filterdData.reduce(
               (acc, item) => (acc = [...acc, ...item]),
@@ -89,7 +66,12 @@ function AdvertisersProvider({ children }) {
             ),
           });
         });
-      // console.log("asssghar", filterdData, all);
+    } else {
+      console.log("whithout others");
+      callback({
+        type: "SET_DATA",
+        payload: filterdData,
+      });
     }
   }
   return (
