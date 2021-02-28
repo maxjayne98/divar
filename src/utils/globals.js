@@ -6,16 +6,28 @@ export function checkFilters(object) {
   for (const iterator in object) if (object[iterator] !== "") return true;
   return false;
 }
+
 export function isAcceptedFilter(filter) {
   const filters = ["field", "date", "name", "title"];
   return filters.filter((i) => i === filter);
 }
+
 export function validFilter(object) {
   return Object.keys(object).reduce((acc, item) => {
     if (object[item] !== "" && isAcceptedFilter(item).length >= 1)
       return { ...acc, ...{ [item]: object[item] } };
     return acc;
   }, {});
+}
+
+export function isTwoObjectSame(obj1, obj2) {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+export function insertParamsToUrl(obj) {
+  window.history.replaceState(null, null, objectToUrlParam(obj));
+}
+export function removeParametersFromUrl() {
+  window.history.replaceState(null, null, "/");
 }
 function isTwoStringSame(str1, str2) {
   if (str1.length < str2.length) {

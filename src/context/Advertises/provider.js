@@ -14,8 +14,14 @@ function AdvertisersProvider({ children }) {
     } else if (action.type === "REST_FILTER") {
       console.log("reset filter");
       return { ...initialState };
+    } else if (action.type === "SET_FILTER") {
+      return {
+        ...state,
+        filters: action.payload,
+      };
     } else if (action.type === "SET_DATA") {
       return {
+        ...state,
         data: action.payload,
         index: 1,
       };
