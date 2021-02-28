@@ -1,6 +1,12 @@
 import { useReducer, useState } from "react";
 import AdvertiseContext from "./store";
-import { filterData, isEmptyObject } from "../../utils/globals";
+import {
+  filterData,
+  isEmptyObject,
+  ascSort,
+  desSort,
+  whichIsNot,
+} from "../../utils/globals";
 import BinarySearchTree from "../../utils/BST";
 import data from "../../data.json";
 
@@ -12,7 +18,6 @@ function AdvertisersProvider({ children }) {
         index: state.index + 1,
       };
     } else if (action.type === "REST_FILTER") {
-      console.log("reset filter");
       return { ...initialState };
     } else if (action.type === "SET_FILTER") {
       return {
@@ -46,11 +51,9 @@ function AdvertisersProvider({ children }) {
       BST.make(filterdData);
       const node = BST.searchInBst(filss["date"]);
       filterdData = node && node.getData();
-      console.log("after date this is :::", filterdData.length);
       delete filss["date"];
     }
     if (!isEmptyObject(filss) && filterdData) {
-      console.log("with other than date", filss);
       const promises = [];
       const numberOfPromises = 20;
       const eachPromiseShare = Math.ceil(filterdData.length / numberOfPromises);
@@ -67,9 +70,6 @@ function AdvertisersProvider({ children }) {
           filterdData = [...filterdData, ...values];
         })
         .then(() => {
-          console.log(
-            filterdData.reduce((acc, item) => (acc += item.length), 0)
-          );
           callback({
             type: "SET_DATA",
             payload: filterdData.reduce(
@@ -82,7 +82,6 @@ function AdvertisersProvider({ children }) {
           }, 1000);
         });
     } else {
-      console.log("whithout others");
       callback({
         type: "SET_DATA",
         payload: filterdData,
@@ -92,8 +91,45 @@ function AdvertisersProvider({ children }) {
       }, 1000);
     }
   }
+  async function doSort(obj, callback) {
+    const key = Object.keys(whichIsNot(obj, "state", "none"))[0];
+    const state = key ? obj[key]["state"] : "none";
+    if (state === "asc") {
+      let v;
+      try {
+        callback({ type: "SET_LOADING", payload: true });
+
+        v = await new Promise((resolve, reject) =>
+          resolve(ascSort([...data], key))
+        );
+        dispatch({ type: "SET_DATA", payload: v });
+      } catch {
+        console.log("err");
+      }
+      setTimeout(() => {
+        callback({ type: "SET_LOADING", payload: false });
+      }, 1000);
+    } else if (state === "des") {
+      let v;
+      try {
+        callback({ type: "SET_LOADING", payload: true });
+
+        v = await new Promise((resolve, reject) =>
+          resolve(desSort([...data], key))
+        );
+        dispatch({ type: "SET_DATA", payload: v });
+      } catch {
+        console.log("err");
+      }
+      setTimeout(() => {
+        callback({ type: "SET_LOADING", payload: false });
+      }, 1000);
+    } else if (state === "none") {
+      dispatch({ type: "SET_DATA", payload: data });
+    }
+  }
   return (
-    <AdvertiseContext.Provider value={{ state, dispatch, doFilter }}>
+    <AdvertiseContext.Provider value={{ state, dispatch, doFilter, doSort }}>
       {children}
     </AdvertiseContext.Provider>
   );

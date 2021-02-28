@@ -78,12 +78,38 @@ export function createFilterObject(arr) {
 }
 
 export function whatIsFieldNextState(value) {
-  console.log("in helper function", value);
-  if (value === "none") {
-    return "asc";
+  if (value === "des") {
+    return "none";
   } else if (value === "asc") {
     return "des";
   } else {
-    return "none";
+    return "asc";
   }
+}
+
+export function whichIsNot(obj, key, str) {
+  return Object.keys(obj).reduce((acc, o) => {
+    return obj[o][key] !== str ? { ...acc, [o]: obj[o] } : acc;
+  }, {});
+}
+
+export function ascSort(data, key) {
+  data.sort((a, b) => {
+    if (a[key].replace(/-/g, "") > b[key].replace(/-/g, "")) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+  return data;
+}
+export function desSort(data, key) {
+  data.sort((a, b) => {
+    if (a[key].replace(/-/g, "") < b[key].replace(/-/g, "")) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+  return data;
 }

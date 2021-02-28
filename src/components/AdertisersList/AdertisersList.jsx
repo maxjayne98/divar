@@ -11,9 +11,7 @@ function AdertisersList() {
   function fetchNewData() {
     dispatch({ type: "ADD_DATA" });
   }
-  useEffect(() => {
-    console.log("loading is changedddd", loading);
-  }, [loading]);
+
   useInfiniteScroll(fetchNewData, 70);
   const titles = [
     "مقدار جدید",

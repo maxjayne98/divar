@@ -11,11 +11,12 @@ import {
   insertParamsToUrl,
   removeParametersFromUrl,
   whatIsFieldNextState,
+  whichIsNot,
 } from "../../utils/globals";
 import "./FilterForm.scss";
 
 function FilterForm() {
-  const { dispatch, state, doFilter } = useAdvertises();
+  const { dispatch, state, doFilter, doSort } = useAdvertises();
   const { filters } = state;
 
   const [formValues, setFormValues] = useState({
@@ -25,13 +26,6 @@ function FilterForm() {
     title: "",
   });
   const changeHandler = (e) => {
-    console.log(
-      "in change handler",
-      formValues,
-      e.target.name,
-      "::::",
-      e.target.value
-    );
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
   const initialSortFields = {
@@ -47,6 +41,8 @@ function FilterForm() {
           state: whatIsFieldNextState(state[action.payload]["state"]),
         },
       };
+    } else if (action.type === "RESET_FIELD") {
+      return { ...initialSortFields };
     }
   }
 
@@ -61,23 +57,19 @@ function FilterForm() {
   function formSubmit(ev) {
     ev.preventDefault();
     const validatedFilters = validFilter(formValues);
-    console.log("before submit:::::", validatedFilters, filters);
     if (isTwoObjectSame(validatedFilters, filters)) {
-      console.log("filters are same so we don't dispatch anything");
     } else {
       if (!isEmptyObject(filters) && isEmptyObject(validatedFilters)) {
-        console.log("user cleared filter so we should reset it");
         dispatch({ type: "REST_FILTER" });
-        console.log(window.location.pathname);
         //clear url parameters
         removeParametersFromUrl();
       } else {
-        console.log("filters are changed and we have to dispatch someThing");
         dispatch({ type: "SET_FILTER", payload: validatedFilters });
         doFilter(validatedFilters, dispatch);
         //change url parameters
         insertParamsToUrl(validatedFilters);
       }
+      dispatchSortFields({ type: "RESET_FIELD" });
     }
   }
 
@@ -85,13 +77,19 @@ function FilterForm() {
     const validatedFilters = validFilter(
       createFilterObject(window.location.pathname.substring(1).split("&"))
     );
-    console.log("in useEffect : ", validatedFilters);
     if (!isEmptyObject(validatedFilters)) {
       setFormValues(validatedFilters);
       dispatch({ type: "SET_FILTER", payload: validatedFilters });
       doFilter(validatedFilters, dispatch);
     }
   }, []);
+
+  useEffect(() => {
+    const sortFiled = whichIsNot(sortFields, "state", "new");
+
+    !isEmptyObject(sortFiled) &&
+      doSort(whichIsNot(sortFields, "state", "new"), dispatch);
+  }, [sortFields]);
 
   return (
     <form id="form1" className="filter-form" onSubmit={formSubmit}>
