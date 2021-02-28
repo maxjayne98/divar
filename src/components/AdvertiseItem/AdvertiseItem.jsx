@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./AdvertiseItem.scss";
 
 function AdvertiseItem({ data }) {
@@ -16,7 +16,6 @@ function AdvertiseItem({ data }) {
 
   return (
     <tr className="ads-item">
-      {/* <td>{id}</td> */}
       <td>{new_value}</td>
       <td>{old_value}</td>
       <td>{date.replace(/-/g, "/")}</td>

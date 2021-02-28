@@ -1,11 +1,9 @@
-$primary-color: #008cba;
-$gray-color: #ddd;
-$medium-up: 600px;
-$large-up: 1000px;
+@import "../../assets/styles/variables";
+$gray-2: $gray-1;
 $global-radius: 4px;
+
 .ads-list {
   padding: 2rem;
-  // direction: rtl;
 }
 table {
   border-collapse: collapse;
@@ -13,35 +11,42 @@ table {
   float: left;
   margin: 0 0 2em;
   thead {
-    border-bottom: 3px solid $primary-color;
+    border-bottom: 3px solid $blue;
     th {
-      padding: 0.35em 0 0.35em;
+      padding: 0.35em;
       font-weight: 400;
       text-align: left;
       // @include heading-font-regular;
       font-size: 1.25em;
       text-align: right;
+      background-color: $gray-2;
+      &:first-child {
+        border-top-left-radius: 5px;
+      }
+      &:last-child {
+        border-top-right-radius: 5px;
+      }
     }
   }
 
   tbody {
-    border-bottom: 3px solid $primary-color;
+    border-bottom: 3px solid $blue;
     tr {
-      border-bottom: 2px solid #ddd;
+      border-bottom: 2px solid $gray-1;
 
       td {
         padding: 0.75em 0;
         text-align: right;
 
         a {
-          color: $primary-color;
+          color: $blue;
           text-decoration: none;
           display: inline-block;
           margin: 0 0.5em 0 0;
           &:hover,
           &:active,
           &:focus {
-            color: darken($primary-color, 10%);
+            color: darken($blue, 10%);
             border: none;
           }
         }
@@ -60,19 +65,19 @@ table {
   }
 }
 
-@media screen and (min-width: $large-up) {
+@media screen and (min-width: $table-large-up) {
   table {
     width: 100%;
 
     thead {
-      border-bottom: 3px solid $primary-color;
+      border-bottom: 3px solid $blue;
       th {
       }
     }
 
     tbody {
       tr {
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid $gray-1;
         td {
         }
       }
@@ -102,10 +107,10 @@ table {
     float: left;
     width: 100%;
     margin: 0 0 1em;
-    border: 1px solid $gray-color;
-    box-shadow: 0px 2px 5px 0px $gray-color;
+    border: 1px solid $gray-2;
+    box-shadow: 0px 2px 5px 0px $gray-2;
     border-radius: $global-radius;
-    border-top: 5px solid $primary-color;
+    border-top: 5px solid $blue;
 
     td {
       padding: 0.5em 0.5em 0.5em 50%;
@@ -126,7 +131,7 @@ table {
   }
 
   tr:nth-of-type(even) {
-    //background: $gray-color;
+    //background: $gray-2;
     td {
       &:before {
       }
@@ -139,7 +144,7 @@ table {
   border: none;
 
   tbody {
-    border-bottom: 3px solid $primary-color;
+    border-bottom: 3px solid $blue;
   }
   th,
   td {
@@ -149,7 +154,7 @@ table {
   tr {
     display: table-row;
     border: none;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $gray-2;
     float: none;
     margin: 0;
     box-shadow: none;
@@ -186,7 +191,7 @@ table {
 %responive-tables {
   @include rwd-first;
 
-  @media screen and (min-width: $medium-up) {
+  @media screen and (min-width: $table-medium-up) {
     @include rwd-second;
   }
 }
@@ -194,7 +199,7 @@ table {
 %responive-tables-large {
   @include rwd-first;
 
-  @media screen and (min-width: $large-up) {
+  @media screen and (min-width: $table-large-up) {
     @include rwd-second;
   }
 }
@@ -208,7 +213,7 @@ table {
       content: $list-headings;
     }
 
-    @media screen and (min-width: $medium-up) {
+    @media screen and (min-width: $table-medium-up) {
       tbody tr td:nth-of-type(#{$i}):before {
         content: "";
       }
@@ -225,7 +230,7 @@ table {
       content: $list-headings;
     }
 
-    @media screen and (min-width: $large-up) {
+    @media screen and (min-width: $table-large-up) {
       tbody tr td:nth-of-type(#{$i}):before {
         content: "";
       }

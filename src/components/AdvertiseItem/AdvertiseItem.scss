@@ -1,5 +1,6 @@
+@import "../../assets/styles/variables";
 .ads-item__star {
-  color: #f7c000;
+  color: $yellow;
   font-size: 1.5rem;
   cursor: pointer;
 }
