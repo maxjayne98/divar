@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import SearchInput from "../SearchInput";
 import CustomizedButton from "../CustomizedButton";
+import SortFields from "../SortFields";
 import useAdvertises from "../../context/Advertises/context.js";
 import useLoading from "../../context/Loading/context";
 import {
@@ -10,6 +11,7 @@ import {
   isTwoObjectSame,
   insertParamsToUrl,
   removeParametersFromUrl,
+  whatIsFieldNextState,
 } from "../../utils/globals";
 import "./FilterForm.scss";
 
@@ -34,6 +36,29 @@ function FilterForm() {
     );
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
+  const initialSortFields = {
+    date: { persian: "تاریخ", state: "none" },
+    name: { persian: "نام", state: "none" },
+  };
+  function setSortFields(state, action) {
+    if (action.type === "SET_FIELD") {
+      return {
+        ...initialSortFields,
+        [action.payload]: {
+          ...state[action.payload],
+          state: whatIsFieldNextState(state[action.payload]["state"]),
+        },
+      };
+    }
+  }
+
+  const [sortFields, dispatchSortFields] = useReducer(
+    setSortFields,
+    initialSortFields
+  );
+  function handleSortOnclick(val) {
+    dispatchSortFields({ type: "SET_FIELD", payload: val });
+  }
 
   function formSubmit(ev) {
     ev.preventDefault();
@@ -57,6 +82,7 @@ function FilterForm() {
       }
     }
   }
+
   useEffect(() => {
     const validatedFilters = validFilter(
       createFilterObject(window.location.pathname.substring(1).split("&"))
@@ -68,6 +94,7 @@ function FilterForm() {
       doFilter(validatedFilters, dispatch);
     }
   }, []);
+
   return (
     <form id="form1" className="filter-form" onSubmit={formSubmit}>
       <SearchInput
@@ -99,6 +126,11 @@ function FilterForm() {
         handleOnChange={changeHandler}
       />
       <CustomizedButton form="form1" type="submit" name="فیلتر" />
+      <SortFields
+        fields={sortFields}
+        displayName="persian"
+        handleOnClick={handleSortOnclick}
+      />
     </form>
   );
 }

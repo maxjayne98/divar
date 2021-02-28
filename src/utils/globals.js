@@ -76,3 +76,14 @@ export function createFilterObject(arr) {
     return { ...acc, [splited[0]]: decodeURI(splited[1]) };
   }, {});
 }
+
+export function whatIsFieldNextState(value) {
+  console.log("in helper function", value);
+  if (value === "none") {
+    return "asc";
+  } else if (value === "asc") {
+    return "des";
+  } else {
+    return "none";
+  }
+}
