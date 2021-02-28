@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SearchInput from "../SearchInput";
+import CustomizedButton from "../CustomizedButton";
 import useAdvertises from "../../context/Advertises/context.js";
 import useLoading from "../../context/Loading/context";
 import {
@@ -9,7 +10,7 @@ import {
   createFilterObject,
   isEmptyObject,
 } from "../../utils/globals";
-import "./FilterForm.css";
+import "./FilterForm.scss";
 
 function FilterForm() {
   const { dispatch, state } = useAdvertises();
@@ -52,32 +53,36 @@ function FilterForm() {
     }
   }, []);
   return (
-    <form className="filter-form" onSubmit={formSubmit}>
+    <form id="form1" className="filter-form" onSubmit={formSubmit}>
+      <CustomizedButton form="form1" type="submit" name="فیلتر" />
       <SearchInput
         values={formValues}
         name="field"
         type="text"
+        label="نوع"
         handleOnChange={changeHandler}
       />
       <SearchInput
         values={formValues}
         name="name"
         type="text"
+        label="نام"
         handleOnChange={changeHandler}
       />
       <SearchInput
         values={formValues}
         name="date"
-        type="date"
+        type="text"
+        label="تاریخ"
         handleOnChange={changeHandler}
       />
       <SearchInput
         values={formValues}
         name="title"
         type="text"
+        label="عنوان"
         handleOnChange={changeHandler}
       />
-      <SearchInput values={formValues} name="submit" type="submit" />
     </form>
   );
 }

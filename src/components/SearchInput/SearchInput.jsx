@@ -1,16 +1,31 @@
 import React, { useState } from "react";
-import "./SearchInput.css";
+import "./SearchInput.scss";
 
-function SearchInput({ values, name, type, handleOnChange }) {
+function SearchInput({ label, values, name, type, handleOnChange }) {
   return (
-    <input
-      className="search-input"
-      defaultValue={values[name]}
-      type={type}
-      onChange={handleOnChange}
-      placeholder={name}
-      name={name}
-    />
+    // <div className="search-input">
+    //   <label className="search-input__label">{name}</label>
+    //   <input
+    //     className="search-input__input"
+    //     defaultValue={values[name]}
+    //     type={type}
+    //     onChange={handleOnChange}
+    //     placeholder={name}
+    //     name={name}
+    //   />
+
+    // </div>
+    <div class="search-input">
+      <label for="inputText">{label}</label>
+      <input
+        className="search-input__input form-control"
+        defaultValue={values[name]}
+        type={type}
+        onChange={handleOnChange}
+        placeholder={name}
+        name={name}
+      />
+    </div>
   );
 }
 export default SearchInput;
