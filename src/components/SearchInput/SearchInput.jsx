@@ -3,11 +3,11 @@ import "./SearchInput.scss";
 
 function SearchInput({ label, values, name, type, handleOnChange }) {
   return (
-    <div class="search-input">
-      <label for="inputText">{label}</label>
+    <div className="search-input">
+      <label>{label}</label>
       <input
         className="search-input__control"
-        defaultValue={values[name]}
+        value={values[name]}
         type={type}
         onChange={handleOnChange}
         placeholder={name}
