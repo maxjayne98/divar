@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import AdvertiseContext from "./store";
 import {
   filterData,
@@ -7,30 +7,37 @@ import {
   desSort,
   whichIsNot,
 } from "../../utils/globals";
+import {
+  ADD_DATA,
+  REST_FILTER,
+  SET_FILTER,
+  SET_DATA,
+  SET_LOADING,
+} from "./constant";
 import BinarySearchTree from "../../utils/BST";
 import data from "../../data.json";
 
 function AdvertisersProvider({ children }) {
   function reducer(state, action) {
-    if (action.type === "ADD_DATA") {
+    if (action.type === ADD_DATA) {
       return {
         ...state,
         index: state.index + 1,
       };
-    } else if (action.type === "REST_FILTER") {
+    } else if (action.type === REST_FILTER) {
       return { ...initialState };
-    } else if (action.type === "SET_FILTER") {
+    } else if (action.type === SET_FILTER) {
       return {
         ...state,
         filters: action.payload,
       };
-    } else if (action.type === "SET_DATA") {
+    } else if (action.type === SET_DATA) {
       return {
         ...state,
         data: action.payload,
         index: 1,
       };
-    } else if (action.type === "SET_LOADING") {
+    } else if (action.type === SET_LOADING) {
       return {
         ...state,
         loading: action.payload,
@@ -40,11 +47,11 @@ function AdvertisersProvider({ children }) {
 
   const initialState = { data: data, index: 1, filters: {}, loading: false };
   const [state, dispatch] = useReducer(reducer, initialState);
-  // const [loading, setLoading] = useState(false);
-
   async function doFilter(fils, callback) {
-    callback({ type: "SET_LOADING", payload: true });
+    callback({ type: SET_LOADING, payload: true });
     const filss = { ...fils };
+    /*i had to use var to reach the best performance,
+     because if I filter with date sooner than other, we drop a lot of useless data*/
     var filterdData = [...data];
     if (filss["date"]) {
       const BST = new BinarySearchTree();
@@ -71,7 +78,7 @@ function AdvertisersProvider({ children }) {
         })
         .then(() => {
           callback({
-            type: "SET_DATA",
+            type: SET_DATA,
             payload: filterdData.reduce(
               (acc, item) => (acc = [...acc, ...item]),
               []
@@ -83,11 +90,11 @@ function AdvertisersProvider({ children }) {
         });
     } else {
       callback({
-        type: "SET_DATA",
+        type: SET_DATA,
         payload: filterdData,
       });
       setTimeout(() => {
-        callback({ type: "SET_LOADING", payload: false });
+        callback({ type: SET_LOADING, payload: false });
       }, 1000);
     }
   }
@@ -97,35 +104,35 @@ function AdvertisersProvider({ children }) {
     if (state === "asc") {
       let v;
       try {
-        callback({ type: "SET_LOADING", payload: true });
+        callback({ type: SET_LOADING, payload: true });
 
         v = await new Promise((resolve, reject) =>
           resolve(ascSort([...data], key))
         );
-        dispatch({ type: "SET_DATA", payload: v });
+        dispatch({ type: SET_DATA, payload: v });
       } catch {
         console.log("err");
       }
       setTimeout(() => {
-        callback({ type: "SET_LOADING", payload: false });
+        callback({ type: SET_LOADING, payload: false });
       }, 1000);
     } else if (state === "des") {
       let v;
       try {
-        callback({ type: "SET_LOADING", payload: true });
+        callback({ type: SET_LOADING, payload: true });
 
         v = await new Promise((resolve, reject) =>
           resolve(desSort([...data], key))
         );
-        dispatch({ type: "SET_DATA", payload: v });
+        dispatch({ type: SET_DATA, payload: v });
       } catch {
         console.log("err");
       }
       setTimeout(() => {
-        callback({ type: "SET_LOADING", payload: false });
+        callback({ type: SET_LOADING, payload: false });
       }, 1000);
     } else if (state === "none") {
-      dispatch({ type: "SET_DATA", payload: data });
+      dispatch({ type: SET_DATA, payload: data });
     }
   }
   return (

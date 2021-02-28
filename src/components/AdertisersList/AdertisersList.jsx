@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import useAdvertises from "../../context/Advertises/context";
 import AdvertiseItem from "../AdvertiseItem";
 import Loading from "../Loading";
 import useInfiniteScroll from "../../hooks/useInfinityScroll";
+import { ADD_DATA } from "../../context/Advertises/constant";
 import "./AdertisersList.scss";
 
 function AdertisersList() {
   const { state, dispatch } = useAdvertises();
   const { data, index, loading } = state;
   function fetchNewData() {
-    dispatch({ type: "ADD_DATA" });
+    dispatch({ type: ADD_DATA });
   }
 
   useInfiniteScroll(fetchNewData, 70);

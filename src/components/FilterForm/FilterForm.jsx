@@ -13,6 +13,8 @@ import {
   whatIsFieldNextState,
   whichIsNot,
 } from "../../utils/globals";
+import { REST_FILTER, SET_FILTER } from "../../context/Advertises/constant";
+
 import "./FilterForm.scss";
 
 function FilterForm() {
@@ -60,16 +62,15 @@ function FilterForm() {
     if (isTwoObjectSame(validatedFilters, filters)) {
     } else {
       if (!isEmptyObject(filters) && isEmptyObject(validatedFilters)) {
-        dispatch({ type: "REST_FILTER" });
+        dispatch({ type: REST_FILTER });
         //clear url parameters
         removeParametersFromUrl();
       } else {
-        dispatch({ type: "SET_FILTER", payload: validatedFilters });
+        dispatch({ type: SET_FILTER, payload: validatedFilters });
         doFilter(validatedFilters, dispatch);
         //change url parameters
         insertParamsToUrl(validatedFilters);
       }
-      // dispatchSortFields({ type: "RESET_FIELD" });
     }
   }
 
@@ -79,7 +80,7 @@ function FilterForm() {
     );
     if (!isEmptyObject(validatedFilters)) {
       setFormValues(validatedFilters);
-      dispatch({ type: "SET_FILTER", payload: validatedFilters });
+      dispatch({ type: SET_FILTER, payload: validatedFilters });
       doFilter(validatedFilters, dispatch);
     }
   }, []);
