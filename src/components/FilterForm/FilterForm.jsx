@@ -29,8 +29,8 @@ function FilterForm() {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
   const initialSortFields = {
-    date: { persian: "تاریخ", state: "none" },
-    name: { persian: "نام", state: "none" },
+    date: { persian: "تاریخ", state: "new" },
+    name: { persian: "نام", state: "new" },
   };
   function setSortFields(state, action) {
     if (action.type === "SET_FIELD") {
@@ -86,7 +86,7 @@ function FilterForm() {
 
   useEffect(() => {
     const sortFiled = whichIsNot(sortFields, "state", "new");
-
+    console.log(sortFiled, isEmptyObject(sortFiled));
     !isEmptyObject(sortFiled) &&
       doSort(whichIsNot(sortFields, "state", "new"), dispatch);
   }, [sortFields]);
