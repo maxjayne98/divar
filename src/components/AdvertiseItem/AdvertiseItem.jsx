@@ -18,7 +18,7 @@ function AdvertiseItem({ data }) {
     <tr className="advertises-item">
       <td>{new_value}</td>
       <td>{old_value}</td>
-      <td>{date.replace(/-/g, "/")}</td>
+      <td>{date}</td>
       <td>{title}</td>
       <td>{field}</td>
       <td>{name}</td>
