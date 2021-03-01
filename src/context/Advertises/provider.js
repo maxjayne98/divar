@@ -13,6 +13,7 @@ import {
   SET_FILTER,
   SET_DATA,
   SET_LOADING,
+  SET_FILTERED_DATA
 } from "./constant";
 import BinarySearchTree from "../../utils/BST";
 import data from "../../data.json";
@@ -37,6 +38,11 @@ function AdvertisersProvider({ children }) {
         data: action.payload,
         index: 1,
       };
+    } else if (action.type === SET_FILTERED_DATA) {
+      return {
+        ...state,
+        filteredData: action.payload,
+      };
     } else if (action.type === SET_LOADING) {
       return {
         ...state,
@@ -45,14 +51,13 @@ function AdvertisersProvider({ children }) {
     }
   }
 
-  const initialState = { data: data, index: 1, filters: {}, loading: false };
+  const initialState = { data: data, index: 1, filters: {}, loading: false, filteredData: [] };
   const [state, dispatch] = useReducer(reducer, initialState);
   async function doFilter(fils, callback) {
     callback({ type: SET_LOADING, payload: true });
     const filss = { ...fils };
-    /*i had to use var to reach the best performance,
-     because if I filter with date sooner than other, we drop a lot of useless data*/
-    var filterdData = [...data];
+    /*if I filter with date sooner than other, we drop a lot of useless data*/
+    let filterdData = [...data];
     if (filss["date"]) {
       const BST = new BinarySearchTree();
       BST.make(filterdData);
@@ -84,6 +89,13 @@ function AdvertisersProvider({ children }) {
               []
             ),
           });
+          callback({
+            type: SET_FILTERED_DATA,
+            payload: filterdData.reduce(
+              (acc, item) => (acc = [...acc, ...item]),
+              []
+            ),
+          });
           setTimeout(() => {
             callback({ type: "SET_LOADING", payload: false });
           }, 1000);
@@ -93,6 +105,10 @@ function AdvertisersProvider({ children }) {
         type: SET_DATA,
         payload: filterdData,
       });
+      callback({
+        type: SET_FILTERED_DATA,
+        payload: filterdData
+      });
       setTimeout(() => {
         callback({ type: SET_LOADING, payload: false });
       }, 1000);
@@ -100,14 +116,15 @@ function AdvertisersProvider({ children }) {
   }
   async function doSort(obj, callback) {
     const key = Object.keys(whichIsNot(obj, "state", "none"))[0];
-    const state = key ? obj[key]["state"] : "none";
-    if (state === "asc") {
+    const sortState = key ? obj[key]["state"] : "none";
+    const ddd = state.filteredData.length > 0 ? [...state.filteredData] : [...data];
+    if (sortState === "asc") {
       let v;
       try {
         callback({ type: SET_LOADING, payload: true });
 
         v = await new Promise((resolve, reject) =>
-          resolve(ascSort([...data], key))
+          resolve(ascSort([...ddd], key))
         );
         dispatch({ type: SET_DATA, payload: v });
       } catch {
@@ -116,13 +133,14 @@ function AdvertisersProvider({ children }) {
       setTimeout(() => {
         callback({ type: SET_LOADING, payload: false });
       }, 1000);
-    } else if (state === "des") {
+    } else if (sortState === "des") {
       let v;
+      // const ddd = state.filteredData.length > 0 ? [...state.filteredData] : [...data];
       try {
         callback({ type: SET_LOADING, payload: true });
 
         v = await new Promise((resolve, reject) =>
-          resolve(desSort([...data], key))
+          resolve(desSort([...ddd], key))
         );
         dispatch({ type: SET_DATA, payload: v });
       } catch {
@@ -131,8 +149,13 @@ function AdvertisersProvider({ children }) {
       setTimeout(() => {
         callback({ type: SET_LOADING, payload: false });
       }, 1000);
-    } else if (state === "none") {
-      dispatch({ type: SET_DATA, payload: data });
+    } else if (sortState === "none") {
+      // const ddd = state.filteredData.length > 0 ? [...state.filteredData] : [...data];
+      if(isEmptyObject(state.filters)){
+        dispatch({ type: SET_DATA, payload: [...data] });
+      }else{
+        doFilter(state.filters, dispatch);
+      }
     }
   }
   return (
