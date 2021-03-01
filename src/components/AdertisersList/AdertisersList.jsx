@@ -24,7 +24,7 @@ function AdertisersList() {
     "مورد علاقه",
   ];
   return (
-    <div className="ads-list">
+    <div className="advertises-list">
       <table id="rwd-table">
         <thead>
           <tr>
