@@ -126,7 +126,7 @@ function AdvertisersProvider({ children }) {
         v = await new Promise((resolve, reject) =>
           resolve(ascSort([...ddd], key))
         );
-        dispatch({ type: SET_DATA, payload: v });
+        callback({ type: SET_DATA, payload: v });
       } catch {
         console.log("err");
       }
@@ -142,7 +142,7 @@ function AdvertisersProvider({ children }) {
         v = await new Promise((resolve, reject) =>
           resolve(desSort([...ddd], key))
         );
-        dispatch({ type: SET_DATA, payload: v });
+        callback({ type: SET_DATA, payload: v });
       } catch {
         console.log("err");
       }
@@ -152,7 +152,7 @@ function AdvertisersProvider({ children }) {
     } else if (sortState === "none") {
       // const ddd = state.filteredData.length > 0 ? [...state.filteredData] : [...data];
       if(isEmptyObject(state.filters)){
-        dispatch({ type: SET_DATA, payload: [...data] });
+        callback({ type: SET_DATA, payload: [...data] });
       }else{
         doFilter(state.filters, dispatch);
       }
